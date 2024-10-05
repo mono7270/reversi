@@ -22,7 +22,7 @@ class Main:
 
         # メインウィンドウ
         self.window = tk.Tk()
-        self.window.geometry("1000x650+200+0")
+        self.window.geometry("1600x900")
         self.window.resizable(False, False)
         self.window.title("Reversi")
 
@@ -34,30 +34,40 @@ class Main:
             "Custom.Treeview",
             background="white",
             foreground="black",
-            rowheight=25,
+            rowheight=60,
             fieldbackground="white",
-            font=("游明朝", 14),
+            font=("", 16),
         )
-        style.map("Custom.Treeview", background=[("selected", "lightgray")], foreground=[("selected", "black")])
+        style.map(
+            "Custom.Treeview",
+            background=[("selected", "lightgray")],
+            foreground=[("selected", "black")],
+        )
 
         # buttonのスタイル
-        style.configure("Custom.TButton", background="white", foreground="black", font=("游明朝", 14))
+        style.configure(
+            "Custom.TButton", background="white", foreground="black", font=("", 16)
+        )
 
         # labelのスタイル
-        style.configure("Custom.TLabel", foreground="black", font=("游明朝", 14))
+        style.configure("Custom.TLabel", foreground="black", font=("", 16))
 
         # labelframeのスタイル
         style.configure("Custom.TLabelframe", borderwidth=5, relief="ridge")
-        style.configure("Custom.TLabelframe.Label", font=("游明朝", 14, "bold"))
+        style.configure("Custom.TLabelframe.Label", font=("", 16, "bold"))
 
         # radiobuttonのスタイル
-        style.configure("Custom.TRadiobutton", foreground="black", font=("游明朝", 14))
+        style.configure("Custom.TRadiobutton", foreground="black", font=("", 16))
 
         # リバーシ盤
         self.b = board.Board()
         self.g = None
-        self.main_frame = tk.Frame(self.window, width=600, height=600, padx=25, pady=50)
-        self.b_picture = tk.Canvas(self.main_frame, width=self.b.b_size, height=self.b.b_size)
+        self.main_frame = tk.Frame(
+            self.window, width=1000, height=1000, padx=50, pady=70
+        )
+        self.b_picture = tk.Canvas(
+            self.main_frame, width=self.b.b_size, height=self.b.b_size
+        )
         self.b.drawBoard(self.b_picture)
         self.b_picture.bind("<Button-1>", self.playerMove)
 
@@ -74,17 +84,17 @@ class Main:
                 "result",
             ),
             show="headings",
-            height=20,
+            height=10,
             style="Custom.Treeview",
         )
 
-        self.tree.column("date", width=120)
-        self.tree.column("time", width=100)
-        self.tree.column("stone_color", width=75)
-        self.tree.column("enemy_level", width=100)
-        self.tree.column("black_count", width=75)
-        self.tree.column("white_count", width=75)
-        self.tree.column("result", width=75)
+        self.tree.column("date", width=250)
+        self.tree.column("time", width=120)
+        self.tree.column("stone_color", width=150)
+        self.tree.column("enemy_level", width=180)
+        self.tree.column("black_count", width=100)
+        self.tree.column("white_count", width=100)
+        self.tree.column("result", width=100)
 
         self.tree.heading("date", text="日付")
         self.tree.heading("time", text="時刻")
@@ -95,33 +105,53 @@ class Main:
         self.tree.heading("result", text="勝敗")
 
         # 対局履歴のスクロールバー
-        self.scrollbar = ttk.Scrollbar(self.main_frame, orient="vertical", command=self.tree.yview)
+        self.scrollbar = ttk.Scrollbar(
+            self.main_frame, orient="vertical", command=self.tree.yview
+        )
         self.tree.configure(yscrollcommand=self.scrollbar.set)
 
         # スタートメニュー
         self.start_menu = ttk.Frame(self.window, width=400, height=600)
 
-        self.game_options = ttk.Labelframe(self.start_menu, text="対局設定", style="Custom.TLabelframe")
+        self.game_options = ttk.Labelframe(
+            self.start_menu, text="対局設定", style="Custom.TLabelframe"
+        )
         self.choose_color = ttk.Labelframe(
-            self.game_options, text="石の色(先手/後手)を選択して下さい", style="Custom.TLabelframe"
+            self.game_options, text="石の色", style="Custom.TLabelframe"
         )
         self.stone_color = tk.IntVar()
         self.radio_black = ttk.Radiobutton(
-            self.choose_color, text="黒(先手)", value=1, variable=self.stone_color, style="Custom.TRadiobutton"
+            self.choose_color,
+            text="黒(先手)",
+            value=1,
+            variable=self.stone_color,
+            style="Custom.TRadiobutton",
         )
         self.radio_white = ttk.Radiobutton(
-            self.choose_color, text="白(後手)", value=-1, variable=self.stone_color, style="Custom.TRadiobutton"
+            self.choose_color,
+            text="白(後手)",
+            value=-1,
+            variable=self.stone_color,
+            style="Custom.TRadiobutton",
         )
 
         self.choose_level = ttk.Labelframe(
-            self.game_options, text="相手の強さを選択して下さい", style="Custom.TLabelframe"
+            self.game_options, text="相手の強さ", style="Custom.TLabelframe"
         )
         self.enemy_level = tk.IntVar()
         self.radio_level1 = ttk.Radiobutton(
-            self.choose_level, text="レベル1", value=1, variable=self.enemy_level, style="Custom.TRadiobutton"
+            self.choose_level,
+            text="レベル1",
+            value=1,
+            variable=self.enemy_level,
+            style="Custom.TRadiobutton",
         )
         self.radio_level2 = ttk.Radiobutton(
-            self.choose_level, text="レベル2", value=2, variable=self.enemy_level, style="Custom.TRadiobutton"
+            self.choose_level,
+            text="レベル2",
+            value=2,
+            variable=self.enemy_level,
+            style="Custom.TRadiobutton",
         )
 
         self.start_button = ttk.Button(
@@ -130,46 +160,92 @@ class Main:
             command=lambda: self.start(self.stone_color.get(), self.enemy_level.get()),
             style="Custom.TButton",
         )
-        self.log_button = ttk.Button(self.start_menu, text="対局履歴", command=self.showLog, style="Custom.TButton")
+        self.log_button = ttk.Button(
+            self.start_menu,
+            text="対局履歴",
+            command=self.showLog,
+            style="Custom.TButton",
+        )
 
-        self.quit_button = ttk.Button(self.start_menu, text="終了", command=self.quitApp, style="Custom.TButton")
+        self.quit_button = ttk.Button(
+            self.start_menu, text="終了", command=self.quitApp, style="Custom.TButton"
+        )
 
         # 対局中メニュー
         self.game_menu = ttk.Frame(self.window, width=400, height=600)
 
-        self.turn = ttk.Labelframe(self.game_menu, text="現在の手番", style="Custom.TLabelframe")
+        self.turn = ttk.Labelframe(
+            self.game_menu, text="現在の手番", style="Custom.TLabelframe"
+        )
         self.turn_texts = ("貴方の番です", "相手の番です", "パスします")
         self.turn_text = tk.StringVar()
-        self.current_turn = ttk.Label(self.turn, textvariable=self.turn_text, style="Custom.TLabel")
+        self.current_turn = ttk.Label(
+            self.turn, textvariable=self.turn_text, style="Custom.TLabel"
+        )
 
-        self.count_frame = ttk.Labelframe(self.game_menu, text="石の数", style="Custom.TLabelframe")
+        self.count_frame = ttk.Labelframe(
+            self.game_menu, text="石の数", style="Custom.TLabelframe"
+        )
         self.stone_count = tk.StringVar()
-        self.display_stone = ttk.Label(self.count_frame, textvariable=self.stone_count, style="Custom.TLabel")
+        self.display_stone = ttk.Label(
+            self.count_frame, textvariable=self.stone_count, style="Custom.TLabel"
+        )
 
-        self.giveup_button = ttk.Button(self.game_menu, text="投了", command=self.confirmGiveUp, style="Custom.TButton")
+        self.giveup_button = ttk.Button(
+            self.game_menu,
+            text="投了",
+            command=self.confirmGiveUp,
+            style="Custom.TButton",
+        )
 
         # 対局結果メニュー
         self.result_menu = ttk.Frame(self.window, width=400, height=600)
 
-        self.final_count_frame = ttk.Labelframe(self.result_menu, text="石の数", style="Custom.TLabelframe")
-        self.final_count = ttk.Label(self.final_count_frame, textvariable=self.stone_count, style="Custom.TLabel")
+        self.final_count_frame = ttk.Labelframe(
+            self.result_menu, text="石の数", style="Custom.TLabelframe"
+        )
+        self.final_count = ttk.Label(
+            self.final_count_frame, textvariable=self.stone_count, style="Custom.TLabel"
+        )
 
         self.result_texts = ("貴方の勝ち", "貴方の負け", "引き分け")
         self.result_text = tk.StringVar()
-        self.result_display = ttk.Label(self.result_menu, textvariable=self.result_text, style="Custom.TLabel")
-        self.replay_button = ttk.Button(self.result_menu, text="もう1局", command=self.replay, style="Custom.TButton")
+        self.result_display = ttk.Label(
+            self.result_menu, textvariable=self.result_text, style="Custom.TLabel"
+        )
+        self.replay_button = ttk.Button(
+            self.result_menu,
+            text="もう1局",
+            command=self.replay,
+            style="Custom.TButton",
+        )
         self.back_button = ttk.Button(
-            self.result_menu, text="始めに戻る", command=self.backMenu, style="Custom.TButton"
+            self.result_menu,
+            text="始めに戻る",
+            command=self.backMenu,
+            style="Custom.TButton",
         )
 
         # 対局履歴メニュー
         self.log_menu = ttk.Frame(self.window, width=400, height=600)
 
-        self.select_date_frame = ttk.Labelframe(self.log_menu, text="日付検索", style="Custom.TLabelframe")
+        self.select_date_frame = ttk.Labelframe(
+            self.log_menu, text="日付検索", style="Custom.TLabelframe"
+        )
         self.select_date = ttk.Combobox(self.select_date_frame, state="readonly")
         self.select_date.bind("<<ComboboxSelected>>", self.searchLog)
-        self.delete_button = ttk.Button(self.log_menu, text="削除", command=self.confirmDelete, style="Custom.TButton")
-        self.back_button2 = ttk.Button(self.log_menu, text="始めに戻る", command=self.backMenu, style="Custom.TButton")
+        self.delete_button = ttk.Button(
+            self.log_menu,
+            text="削除",
+            command=self.confirmDelete,
+            style="Custom.TButton",
+        )
+        self.back_button2 = ttk.Button(
+            self.log_menu,
+            text="始めに戻る",
+            command=self.backMenu,
+            style="Custom.TButton",
+        )
 
         # 盤の配置
         self.main_frame.grid(row=0, column=0)
@@ -180,7 +256,9 @@ class Main:
         self.main_frame.grid_columnconfigure(0, weight=1)
 
         # メニュー画面の配置
-        self.switchMenu(self.start_menu, self.game_menu, self.result_menu, self.log_menu)
+        self.switchMenu(
+            self.start_menu, self.game_menu, self.result_menu, self.log_menu
+        )
 
         # スタートメニューの配置
         self.game_options.grid(row=0, column=0, pady=15)
@@ -234,7 +312,9 @@ class Main:
             self.stone_count.set(f"黒:{self.b.black_count} 白:{self.b.white_count}")
 
             self.switchMain(self.b_picture, self.tree)
-            self.switchMenu(self.game_menu, self.start_menu, self.result_menu, self.log_menu)
+            self.switchMenu(
+                self.game_menu, self.start_menu, self.result_menu, self.log_menu
+            )
 
             if self.g.checkSquares(self.b):
                 match sc:
@@ -362,7 +442,13 @@ class Main:
         勝敗判定と結果の記録
         """
         self.self_turn = False
-        result_number = self.g.judge(self.b.black_count, self.b.white_count, self.b.black, self.b.white, self.give_up)
+        result_number = self.g.judge(
+            self.b.black_count,
+            self.b.white_count,
+            self.b.black,
+            self.b.white,
+            self.give_up,
+        )
 
         match result_number:
             case 0:
@@ -373,7 +459,9 @@ class Main:
                 self.result_text.set(self.result_texts[result_number])
 
         self.saveResult(result_number)
-        self.switchMenu(self.result_menu, self.start_menu, self.game_menu, self.log_menu)
+        self.switchMenu(
+            self.result_menu, self.start_menu, self.game_menu, self.log_menu
+        )
 
         self.give_up = False
 
@@ -409,7 +497,9 @@ class Main:
         answer = mb.askokcancel("確認", "同じ設定でもう1局打ちますか?")
 
         if answer:
-            self.switchMenu(self.game_menu, self.start_menu, self.result_menu, self.log_menu)
+            self.switchMenu(
+                self.game_menu, self.start_menu, self.result_menu, self.log_menu
+            )
             self.start(self.stone_color.get(), self.enemy_level.get())
 
     def backMenu(self):
@@ -423,7 +513,9 @@ class Main:
                 self.tree.delete(i)
 
             self.switchMain(self.b_picture, self.tree)
-            self.switchMenu(self.start_menu, self.game_menu, self.result_menu, self.log_menu)
+            self.switchMenu(
+                self.start_menu, self.game_menu, self.result_menu, self.log_menu
+            )
 
     def openLog(self):
         """
@@ -437,7 +529,9 @@ class Main:
 
         self.log = sqlite3.connect("game_log/game_log.db")
         cur = self.log.cursor()
-        cur.execute('SELECT COUNT(*) FROM sqlite_master WHERE TYPE="table" AND NAME="reversi_log"')
+        cur.execute(
+            'SELECT COUNT(*) FROM sqlite_master WHERE TYPE="table" AND NAME="reversi_log"'
+        )
 
         if cur.fetchone() == (0,):
             cur.execute(
@@ -453,7 +547,9 @@ class Main:
         cur = self.openLog()
         self.loadLog(cur)
         self.switchMain(self.tree, self.b_picture, True)
-        self.switchMenu(self.log_menu, self.start_menu, self.game_menu, self.result_menu)
+        self.switchMenu(
+            self.log_menu, self.start_menu, self.game_menu, self.result_menu
+        )
         self.log.close()
 
     def loadLog(self, cur):

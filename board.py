@@ -16,16 +16,22 @@ class Board:
             self.b_status[i][0] = self.wall
             self.b_status[i][9] = self.wall
 
-        self.b_size = 480
+        self.b_size = 640
         self.c_size = self.b_size / 8
         self.s_size = self.c_size * 0.8
 
     def drawBoard(self, b_picture):
-        b_picture.create_rectangle(0, 0, self.b_size, self.b_size, fill="green", outline="black")
+        b_picture.create_rectangle(
+            0, 0, self.b_size, self.b_size, fill="green", outline="black"
+        )
 
         for i in range(8):
-            b_picture.create_line(i * self.c_size, 0, i * self.c_size, self.b_size, fill="black")
-            b_picture.create_line(0, i * self.c_size, self.b_size, i * self.c_size, fill="black")
+            b_picture.create_line(
+                i * self.c_size, 0, i * self.c_size, self.b_size, fill="black"
+            )
+            b_picture.create_line(
+                0, i * self.c_size, self.b_size, i * self.c_size, fill="black"
+            )
 
     def resetStones(self):
         for i in range(8):
